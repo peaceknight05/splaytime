@@ -17,11 +17,11 @@ class Tree():
 		if currPtr != None:
 			sys.stdout.write(indent)
 			if last:
-				sys.stdout.write("R----")
+				sys.stdout.write("R---- ")
 				indent += "     "
 			else:
-				sys.stdout.write("L----")
-				indent += "|    "
+				sys.stdout.write("L---- ")
+				indent += "|     "
 
 			print(f"{currPtr.key}|{currPtr.data}")
 
