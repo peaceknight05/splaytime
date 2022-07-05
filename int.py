@@ -199,8 +199,9 @@ while pc < len(inst):
 
 		pc -= 1 # stops on the character after the numeral, next cycle would skip it
 
-		if t.search(addr) == None and args.show_warnings:
+		if t.search(addr) == None:
 			sys.stderr.write("No node with address %i\n"%addr)
+			sys.exit(1);
 		if args.verbose: print(f"Shifted to {addr}")
 
 	pc += 1
