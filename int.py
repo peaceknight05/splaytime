@@ -40,7 +40,7 @@ while pc < len(inst):
 						sys.stderr.write("Invalid indexing at character %i\n"%pc)
 						sys.exit(1)
 
-					n, addr, idefault = 1, t.root.key, True
+					n, addr, idefault, stored_root = 1, t.root.key, True, t.root.key
 					pc += 1
 					if pc < len(inst): # edge case: entire instruction string is just {[ or {x|[
 						char = inst[pc]
@@ -71,6 +71,7 @@ while pc < len(inst):
 						key = data
 						pc -= 1
 						char = inst[pc]
+						t.search(stored_root)
 					else:
 						value = data
 						break
@@ -133,21 +134,27 @@ while pc < len(inst):
 							sys.stderr.write("Invalid indexing at character %i\n"%pc)
 							sys.exit(1)
 
-						default, saddr = True, t.root.key
+						default, saddr, n = True, t.root.key, 1
 						pc += 1
 						if pc < len(inst): # edge case: entire instruction string is just '@['
 							char = inst[pc]
+							if char == '-' and pc+1 < len(inst):
+								if inst[pc+1].isdigit():
+									n = -1; pc += 1; char = inst[pc]
+								elif inst[pc+1] == '-':
+									sys.stderr.write("Double negative found at character %i"%pc)
+									sys.exit(1)
 							while char.isdigit():
 								if default:
 									saddr = int(char)
 									default = False
-								saddr = saddr * 10 + int(char)
+								else: saddr = saddr * 10 + int(char)
 
 								pc += 1
 								if pc >= len(inst): break
 								char = inst[pc]
 
-						addr = t.search(saddr).data
+						addr = t.search(saddr*n).data
 						break
 
 					addr = addr * 10 + int(char)
@@ -174,21 +181,27 @@ while pc < len(inst):
 						sys.stderr.write("Invalid indexing at character %i\n"%pc)
 						sys.exit(1)
 
-					default, saddr = True, t.root.key
+					default, saddr, n = True, t.root.key, 1
 					pc += 1
 					if pc < len(inst): # edge case: entire instruction string is just '$['
 						char = inst[pc]
+						if char == '-' and pc+1 < len(inst):
+							if inst[pc+1].isdigit():
+								n = -1; pc += 1; char = inst[pc]
+							elif inst[pc+1] == '-':
+								sys.stderr.write("Double negative found at character %i"%pc)
+								sys.exit(1)
 						while char.isdigit():
 							if default:
 								saddr = int(char)
 								default = False
-							saddr = saddr * 10 + int(char)
+							else: saddr = saddr * 10 + int(char)
 
 							pc += 1
 							if pc >= len(inst): break
 							char = inst[pc]
 
-					addr = t.search(saddr).data
+					addr = t.search(saddr*n).data
 					break
 
 				addr = addr * 10 + int(char)
