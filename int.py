@@ -6,9 +6,9 @@ parser = argparse.ArgumentParser(description="Interpreter for Splaytime", format
 parser.add_argument("-w", "--show-warnings", action="store_true", help="Show warnings")
 parser.add_argument("-v", "--verbose", action="store_true", help="For debugging; outputs every instruction that is done.")
 parser.add_argument("-d", "--display-tree", action="store_true", help="For debugging; outputs the splay tree at the end.")
-parser.add_argument("-i", "--input", help="Uses a file as an input source instead of stdin")
-parser.add_argument("-o", "--output", help="Outputs to a file instead of stdout")
-parser.add_argument("file")
+parser.add_argument("-i", "--input", help="Uses a file as an input source instead of stdin.")
+parser.add_argument("-o", "--output", help="Outputs to a file instead of stdout.")
+parser.add_argument("file", help="File to interpret.")
 args = parser.parse_args()
 
 I = open(args.file, "r")
